@@ -101,13 +101,11 @@ This addresses a key requirement for clinical AI: the ability for clinicians to 
 
 ## Results
 
-*To be updated after training*
-
 | Metric | Value |
 |--------|-------|
-| Validation Kappa (rounded) | TBD |
-| Validation Kappa (optimized thresholds) | TBD |
-| Optimized Thresholds | TBD |
+| Validation Kappa (rounded) | 0.8916 |
+| Validation Kappa (optimized thresholds) | 0.9140 |
+| Optimized Thresholds | [0.55, 1.51, 2.50, 3.17] |
 
 ### GradCAM Examples by Grade
 
