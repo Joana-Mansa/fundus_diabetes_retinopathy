@@ -1,0 +1,23 @@
+# Build artifacts
+fundus_inference_cpp/build/
+*.exe
+*.lib
+*.obj
+*.pdb
+
+# Model files (too large for GitHub)
+*.onnx
+*.pth
+*.bin
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+venv/
+c_fundus/
+.venv/
+env/
+
+*.dll

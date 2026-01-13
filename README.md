@@ -107,18 +107,36 @@ This addresses a key requirement for clinical AI: the ability for clinicians to 
 | Validation Kappa (optimized thresholds) | 0.9140 |
 | Optimized Thresholds | [0.55, 1.51, 2.50, 3.17] |
 
+## Performance
+
+| Metric | Value |
+|--------|-------|
+| Validation Kappa | 0.914 |
+| C++ Inference Time | ~50ms/image (CPU) |
+| Model Size (ONNX) | ~160MB |
+
 ### GradCAM Examples by Grade
 
 *To be added: visualization grid showing original images and attention maps for each severity level*
 
-## Project Structure
 
+## Project Structure
 ```
-├── dr_classification.py    # Main training and evaluation script
-├── README.md               # This file
-├── gradcam_by_grade.png    # Explainability visualizations (after training)
-├── best_model_kappa_512.pth # Trained model weights (after training)
-└── submission.csv          # Test set predictions (after training)
+├── README.md                    # This file
+├── efficient-net-b6.ipynb       # Training notebook
+├── gradcam_by_grade.png         # Explainability visualizations
+├── convert_to_onnx.py           # PyTorch to ONNX conversion
+└── fundus_inference_cpp/        # C++ inference engine
+    ├── CMakeLists.txt
+    ├── include/
+    │   └── dr_grader.hpp
+    ├── src/
+    │   └── dr_grader.cpp
+    ├── apps/
+    │   └── main.cpp
+    ├── models/
+    │   └── dr_model.onnx
+    └── test_images/
 ```
 
 ## Usage
@@ -163,6 +181,29 @@ python dr_classification.py
 | EfficientNet-B6 | Strong accuracy/efficiency tradeoff; pretrained weights transfer well to medical imaging |
 | GradCAM explainability | Essential for clinical trust; validates model attends to relevant pathology |
 
+## C++ Inference Engine
+
+A high-performance C++ inference engine is included for deployment scenarios requiring low-latency inference.
+
+### Features
+- ONNX Runtime inference (CPU optimized)
+- Ben Graham preprocessing pipeline ported to C++
+- Modern C++20
+- ~50ms inference time per image
+
+### Build & Run
+```bash
+cd fundus_inference_cpp
+mkdir build && cd build
+cmake .. -DCMAKE_TOOLCHAIN_FILE=[vcpkg]/scripts/buildsystems/vcpkg.cmake
+cmake --build . --config Release
+
+./Release/fundus_inference.exe ../models/dr_model.onnx ../test_images/fundus.jpg
+```
+
+See [fundus_inference_cpp/README.md](fundus_inference_cpp/README.md) for detailed build instructions.
+
+
 ## Limitations
 
 - Trained on single dataset (APTOS 2019); domain shift expected on other populations
@@ -176,6 +217,8 @@ python dr_classification.py
 - Domain adaptation techniques for multi-center deployment
 - Image quality filtering pipeline
 - Multi-task learning for concurrent pathology detection (glaucoma, AMD, cataract)
+
+
 
 ## References
 
